@@ -22,6 +22,7 @@ export default async function ClientsPage() {
                 name: 'Acme Corp',
                 email: 'billing@acme.com',
                 address: '123 Tech Park, Silicon Valley, CA',
+                image_url: null,
                 created_at: new Date().toISOString(),
             },
             {
@@ -30,6 +31,7 @@ export default async function ClientsPage() {
                 name: 'Globex Corporation',
                 email: 'accounts@globex.com',
                 address: '456 Business Blvd, New York, NY',
+                image_url: null,
                 created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
             }
         ]
