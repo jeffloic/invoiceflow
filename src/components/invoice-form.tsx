@@ -5,7 +5,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createInvoiceAction } from '@/app/actions/invoices'
-import { Calendar, DollarSign, FileText, Loader2, User } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { Calendar, DollarSign, FileText, User } from 'lucide-react'
+import Spinner from '@/components/spinner'
 
 type Client = {
     id: string
@@ -29,8 +31,10 @@ export default function InvoiceForm({ clients }: { clients: Client[] }) {
 
         if (response?.error) {
             setError(response.error)
+            toast.error(response.error)
             setLoading(false)
         } else if (response?.success) {
+            toast.success(response.message || 'Invoice created successfully!')
             setSuccess(response.message || 'Invoice created successfully!')
             // Optional: Redirect after a short delay or immediately
             setTimeout(() => {
@@ -197,7 +201,7 @@ export default function InvoiceForm({ clients }: { clients: Client[] }) {
                 >
                     {loading ? (
                         <>
-                            <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
+                            <Spinner size="sm" className="mr-2 text-white" />
                             Creating...
                         </>
                     ) : (

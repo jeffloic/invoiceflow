@@ -5,22 +5,31 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import { LayoutDashboard, Users, FileText, LogOut } from 'lucide-react'
 import { logout } from '@/app/auth/actions'
+import MobileNav from '@/components/dashboard/mobile-nav'
+
+import { cookies } from 'next/headers'
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
     const supabase = await createClient()
+    const cookieStore = await cookies()
+    const isDemo = cookieStore.get('is_demo')?.value === 'true'
 
     const {
         data: { user },
     } = await supabase.auth.getUser()
 
-    if (!user) {
+    if (!user && !isDemo) {
         redirect('/login')
     }
 
+    const userEmail = isDemo ? 'demo@invoiceflow.com' : user?.email
+
     return (
-        <div className="min-h-screen bg-gray-50 flex">
+        <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
+            <MobileNav userEmail={userEmail} />
+
             {/* Sidebar */}
-            <aside className="w-64 bg-white shadow-sm border-r border-gray-100 hidden md:flex flex-col print:hidden">
+            <aside className="w-64 bg-white shadow-sm border-r border-gray-100 hidden md:flex flex-col print:hidden flex-shrink-0">
                 <div className="h-16 flex items-center px-6 border-b border-gray-100">
                     <LayoutDashboard className="h-6 w-6 text-indigo-600 mr-2" />
                     <span className="text-xl font-bold text-gray-900">InvoiceFlow</span>
@@ -52,12 +61,12 @@ export default async function DashboardLayout({ children }: { children: ReactNod
                     <div className="flex items-center mb-4">
                         <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
                             <span className="text-indigo-600 font-medium text-sm">
-                                {user.email?.charAt(0).toUpperCase()}
+                                {userEmail?.charAt(0).toUpperCase()}
                             </span>
                         </div>
                         <div className="ml-3">
                             <p className="text-sm font-medium text-gray-700 truncate w-32">
-                                {user.email}
+                                {userEmail}
                             </p>
                         </div>
                     </div>

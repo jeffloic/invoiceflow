@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { login } from '@/app/auth/actions'
 import { CheckCheck, LayoutDashboard } from 'lucide-react'
+import { SubmitButton } from '@/components/submit-button'
 
 export default function LoginPage({
     searchParams,
@@ -71,12 +72,7 @@ export default function LoginPage({
                 </div>
 
                 <div>
-                    <button
-                        type="submit"
-                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                    >
-                        Sign in
-                    </button>
+                    <SubmitButton>Sign in</SubmitButton>
                 </div>
             </form>
         </div>

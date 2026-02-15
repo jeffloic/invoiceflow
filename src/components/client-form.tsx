@@ -5,7 +5,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClientAction } from '@/app/actions/clients'
-import { Loader2, User, Mail, MapPin } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { User, Mail, MapPin } from 'lucide-react'
+import Spinner from '@/components/spinner'
 
 export default function ClientForm() {
     const router = useRouter()
@@ -24,8 +26,10 @@ export default function ClientForm() {
 
         if (response?.error) {
             setError(response.error)
+            toast.error(response.error)
             setLoading(false)
         } else if (response?.success) {
+            toast.success('Client created successfully!')
             setSuccess('Client created successfully!')
             // Optional: Redirect after a short delay or immediately
             setTimeout(() => {
@@ -139,7 +143,7 @@ export default function ClientForm() {
                 >
                     {loading ? (
                         <>
-                            <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
+                            <Spinner size="sm" className="mr-2 text-white" />
                             Creating...
                         </>
                     ) : (

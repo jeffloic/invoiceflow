@@ -44,7 +44,16 @@ export async function updateSession(request: NextRequest) {
         (request.nextUrl.pathname.startsWith('/login') ||
             request.nextUrl.pathname.startsWith('/signup'))
     ) {
-        return NextResponse.redirect(new URL('/dashboard', request.url))
+        const url = request.nextUrl.clone()
+        url.pathname = '/dashboard'
+        const redirectResponse = NextResponse.redirect(url)
+        redirectResponse.cookies.delete('is_demo')
+        return redirectResponse
+    }
+
+    // Clear demo cookie if visiting auth pages (even if not logged in)
+    if (request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/signup')) {
+        supabaseResponse.cookies.delete('is_demo')
     }
 
     return supabaseResponse
