@@ -20,6 +20,11 @@ export async function createClientAction(formData: FormData) {
     const email = formData.get('email') as string
     const address = formData.get('address') as string
 
+    // Server-side validation
+    if (!name) {
+        return { error: 'Client name is required.' }
+    }
+
     const { error } = await supabase.from('clients').insert({
         name,
         email,
@@ -32,7 +37,7 @@ export async function createClientAction(formData: FormData) {
     }
 
     revalidatePath('/dashboard/clients')
-    redirect('/dashboard/clients')
+    return { success: true, message: 'Client created successfully!' }
 }
 
 export async function deleteClientAction(id: string) {
